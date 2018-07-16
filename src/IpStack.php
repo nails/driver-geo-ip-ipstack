@@ -2,11 +2,12 @@
 
 namespace Nails\GeoIp\Driver;
 
+use Nails\Common\Driver\Base;
 use Nails\Factory;
 use Nails\GeoIp\Exception\GeoIpDriverException;
 use Nails\GeoIp\Interfaces\Driver;
 
-class IpStack implements Driver
+class IpStack extends Base implements Driver
 {
     /**
      * The base url of the ipstack.com service.
@@ -17,41 +18,10 @@ class IpStack implements Driver
     // --------------------------------------------------------------------------
 
     /**
-     * The status code for a successful response from the API
-     * @var int
-     */
-    const STATUS_OK = 200;
-
-    // --------------------------------------------------------------------------
-
-    /**
      * The API Key to use.
      * @var string
      */
-    protected $sApiKey;
-
-    // --------------------------------------------------------------------------
-
-    /**
-     * The HTTP client to use
-     * @var object
-     */
-    protected $oHttpClient;
-
-    // --------------------------------------------------------------------------
-
-    /**
-     * IpStack constructor.
-     */
-    public function __construct()
-    {
-        $this->oHttpClient = Factory::factory('HttpClient');
-        $this->sApiKey     = appSetting('sAccessKey', 'nailsapp/driver-geo-ip-ipstack');
-
-        if (empty($this->sApiKey)) {
-            throw new GeoIpDriverException('An IPStack Access Key must be provided.');
-        }
-    }
+    protected $sAccessKey;
 
     // --------------------------------------------------------------------------
 
@@ -63,20 +33,25 @@ class IpStack implements Driver
      */
     public function lookup($sIp)
     {
-        $oIp = Factory::factory('Ip', 'nailsapp/module-geo-ip');
+        $oHttpClient = Factory::factory('HttpClient');
+        $oIp         = Factory::factory('Ip', 'nailsapp/module-geo-ip');
 
         $oIp->setIp($sIp);
 
         try {
 
-            $oResponse = $this->oHttpClient->request(
+            if (empty($this->sAccessKey)) {
+                throw new GeoIpDriverException('An IPStack Access Key must be provided.');
+            }
+
+            $oResponse = $oHttpClient->request(
                 'GET',
-                static::BASE_URL . '/' . $sIp . '?access_key=' . $this->sApiKey
+                static::BASE_URL . '/' . $sIp . '?access_key=' . $this->sAccessKey . '2'
             );
 
-            if ($oResponse->getStatusCode() === static::STATUS_OK) {
+            $oJson = json_decode($oResponse->getBody());
 
-                $oJson = json_decode($oResponse->getBody());
+            if (empty($oJson->error)) {
 
                 if (!empty($oJson->city)) {
                     $oIp->setCity($oJson->city);
@@ -97,10 +72,16 @@ class IpStack implements Driver
                 if (!empty($oJson->longitude)) {
                     $oIp->setLng($oJson->longitude);
                 }
+            } else {
+                throw new GeoIpDriverException(
+                    $oJson->error->info,
+                    $oJson->error->code
+                );
             }
 
         } catch (\Exception $e) {
-            //  @log the exception somewhere
+            $oIp->setError($e->getMessage());
+            trigger_error($e->getMessage(), E_USER_WARNING);
         }
 
         return $oIp;
