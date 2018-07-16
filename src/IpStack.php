@@ -44,10 +44,32 @@ class IpStack extends Base implements Driver
                 throw new GeoIpDriverException('An IPStack Access Key must be provided.');
             }
 
-            $oResponse = $oHttpClient->request(
-                'GET',
-                static::BASE_URL . '/' . $sIp . '?access_key=' . $this->sAccessKey . '2'
-            );
+            try {
+
+                $oResponse = $oHttpClient->request(
+                    'GET',
+                    static::BASE_URL . '/' . $sIp,
+                    [
+                        'query' => [
+                            'access_key' => $this->sAccessKey,
+                        ],
+                    ]
+                );
+
+            } catch (\GuzzleHttp\Exception\ClientException $e) {
+                $oJson = json_decode($e->getResponse()->getBody());
+                if (!empty($oJson->error->message)) {
+                    throw new GeoIpDriverException(
+                        $oJson->error->message,
+                        $e->getCode()
+                    );
+                } else {
+                    throw new GeoIpDriverException(
+                        $e->getMessage(),
+                        $e->getCode()
+                    );
+                }
+            }
 
             $oJson = json_decode($oResponse->getBody());
 
