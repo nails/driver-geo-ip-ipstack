@@ -34,7 +34,7 @@ class IpStack extends Base implements Driver
     public function lookup($sIp)
     {
         $oHttpClient = Factory::factory('HttpClient');
-        $oIp         = Factory::factory('Ip', 'nailsapp/module-geo-ip');
+        $oIp         = Factory::factory('Ip', 'nails/module-geo-ip');
 
         $oIp->setIp($sIp);
 

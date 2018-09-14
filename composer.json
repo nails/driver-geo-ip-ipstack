@@ -1,5 +1,5 @@
 {
-    "name": "nailsapp/driver-geo-ip-ipstack",
+    "name": "nails/driver-geo-ip-ipstack",
     "keywords": ["Nails", "Shed Collective", "CodeIgniter", "GeoIP Module", "Driver", "IPStack"],
     "homepage": "http://nailsapp.co.uk/modules/geo-ip/driver/ipstack",
     "description": "This is the \"IPStack\" driver for the Nails GeoIP module.",
@@ -21,7 +21,7 @@
     "prefer-stable": true,
     "require":
     {
-        "nailsapp/module-geo-ip": "dev-develop"
+        "nails/module-geo-ip": "dev-develop"
     },
     "require-dev":
     {
@@ -33,7 +33,7 @@
         {
             "name": "IPStack",
             "type": "driver",
-            "forModule": "nailsapp/module-geo-ip",
+            "forModule": "nails/module-geo-ip",
             "data": {
                 "namespace": "Nails\\GeoIp\\Driver\\",
                 "class": "IpStack",
