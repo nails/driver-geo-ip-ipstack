@@ -4,6 +4,7 @@ namespace Nails\GeoIp\Driver;
 
 use Nails\Common\Driver\Base;
 use Nails\Factory;
+use Nails\GeoIp;
 use Nails\GeoIp\Exception\GeoIpDriverException;
 use Nails\GeoIp\Interfaces\Driver;
 
@@ -34,7 +35,7 @@ class IpStack extends Base implements Driver
     public function lookup($sIp)
     {
         $oHttpClient = Factory::factory('HttpClient');
-        $oIp         = Factory::factory('Ip', 'nails/module-geo-ip');
+        $oIp         = Factory::factory('Ip', GeoIp\Constants::MODULE_SLUG);
 
         $oIp->setIp($sIp);
 
