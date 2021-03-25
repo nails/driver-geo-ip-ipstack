@@ -34,17 +34,10 @@
             "name": "IPStack",
             "type": "driver",
             "forModule": "nails/module-geo-ip",
+            "namespace": "Nails\\GeoIp\\Driver\\",
             "data": {
                 "namespace": "Nails\\GeoIp\\Driver\\",
-                "class": "IpStack",
-                "settings": [
-                    {
-                        "key": "sAccessKey",
-                        "label": "Access Key",
-                        "type": "password",
-                        "encrypted": true
-                    }
-                ]
+                "class": "IpStack"
             }
         }
     },
