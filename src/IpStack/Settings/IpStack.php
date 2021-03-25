@@ -1,6 +1,6 @@
 <?php
 
-namespace Nails\GeoIp\Driver\Settings;
+namespace Nails\GeoIp\Driver\IpStack\Settings;
 
 use Nails\Common\Helper\Form;
 use Nails\Common\Interfaces;
@@ -11,7 +11,7 @@ use Nails\Factory;
 /**
  * Class IpStack
  *
- * @package Nails\GeoIp\Driver\Settings
+ * @package Nails\GeoIp\Driver\IpStack\Settings
  */
 class IpStack implements Interfaces\Component\Settings
 {
