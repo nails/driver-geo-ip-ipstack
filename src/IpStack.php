@@ -7,6 +7,7 @@ use Nails\Factory;
 use Nails\GeoIp;
 use Nails\GeoIp\Exception\GeoIpDriverException;
 use Nails\GeoIp\Interfaces\Driver;
+use Nails\GeoIp\Result;
 
 class IpStack extends Base implements Driver
 {
@@ -29,10 +30,10 @@ class IpStack extends Base implements Driver
     /**
      * @param string $sIp The IP address to look up
      *
-     * @return \Nails\GeoIp\Result\Ip
+     * @return Result\Ip
      * @deprecated
      */
-    public function lookup($sIp)
+    public function lookup(string $sIp): Result\Ip
     {
         $oHttpClient = Factory::factory('HttpClient');
         $oIp         = Factory::factory('Ip', GeoIp\Constants::MODULE_SLUG);
