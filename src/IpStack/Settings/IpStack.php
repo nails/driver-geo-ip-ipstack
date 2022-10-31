@@ -24,7 +24,7 @@ class IpStack implements Interfaces\Component\Settings
      */
     public function getLabel(): string
     {
-        return 'Geo-IP: IPInfo';
+        return 'Geo-IP: IPStack';
     }
 
     // --------------------------------------------------------------------------
